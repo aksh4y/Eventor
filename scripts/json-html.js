@@ -13,5 +13,6 @@ $.each(cwData.events, function (i, events) {
 
         var option_cate = '<li class="item"><a href="#">' + events.name.text + '</a></li>';
         $('#product_list').append(option_cate);
+        return i < 2;
 
 });

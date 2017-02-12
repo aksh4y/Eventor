@@ -94,6 +94,35 @@ function findAddress() {
         }
     });
 }
+// build addresses
+function findEventVenues(lat, lng, event_name, event_url, date) {
+    //var address = document.getElementById("gmap_where").value;
+// script uses our 'geocoder' in order to find location by address name
+    var myLatlng = new google.maps.LatLng(lat, lng);
+    var mapOptions = {
+        zoom: 14,
+        center: myLatlng
+    };
+    var marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map,
+        title:event_name
+    });
+    var infowindow = new google.maps.InfoWindow({
+        map: map,
+        content:  event_name + '<br />' + "Date: " + date + '<br />' + '<a href="' + event_url +'">Event Link</a>'
+    });
+    clearInfos();
+// add event handler to current marker
+    google.maps.event.addListener(marker, 'click', function() {
+        clearInfos();
+        infowindow.open(map,marker);
+    });
+    infos.push(infowindow);
+
+// To add the marker to the map, call setMap();
+   // marker.setMap(map);
+}
 // find custom places function
 function findPlaces() {
 // prepare variables (filter)
@@ -103,8 +132,8 @@ function findPlaces() {
     var lat = document.getElementById('lat').value;
     var lng = document.getElementById('lng').value;
     var cur_location = new google.maps.LatLng(lat, lng);
-// prepare request to Places
-    var request = {
+/* prepare request to Places
+    /var request = {
         location: cur_location,
         radius: radius,
         types: [type]
@@ -114,39 +143,38 @@ function findPlaces() {
     }
 // send request
     service = new google.maps.places.PlacesService(map);
-    service.search(request, createMarkers);
-}
-
-function scraped_data_URL_builder() {
-    var URL_REQ = "https://raw.githubusercontent.com/aksh4y/Eventor/master/data_source.json";
-    $.ajax({
-        type: "GET",
-        url: URL_REQ,
-        data: {limit: 3},
-        dataType: "json",
-        success: function(data) {
-            // Do some awesome stuff.
-        }
-    });
+    service.search(request, createMarkers);*/
+    build_URL(lat, lng, radius, type, keyword);
 }
 
 
 function build_URL(lat, lng, radius, type, keyword) {
 
-    var URL_REQ = "https://www.eventbriteapi.com/v3/events/search/?location.lattitude=" +
+    var URL_EVENT = "https://www.eventbriteapi.com/v3/events/search/?location.latitude=" +
     lat + "&location.longitude=" + lng + "&categories=" + type + "&location.within=" + radius + "km"
         + "&q=" + keyword
         + "&token=DX43YVUK5EDWAE357ROL";
-
     var xhReq = new XMLHttpRequest();
-    xhReq.open("GET", URL_REQ, false);
+    xhReq.open("GET", URL_EVENT, false);
     xhReq.send(null);
-    var cwData = JSON.parse(xhReq.responseText)
+    var cwData = JSON.parse(xhReq.responseText);
+
 
     $.each(cwData.events, function (i, events) {
 
-        var option_cate = '<li class="item"><a href="#">' + events.name.text + '</a></li>';
-        $('#product_list').append(option_cate);
+        //var option_cate = '<li class="item"><a href="#">' + events.name.text + '</a></li>';
+        //$('#product_list').append(option_cate);
+        var venue_id = events.venue_id;
+        var URL_VENUE = "https://www.eventbriteapi.com/v3/venues/" +
+            venue_id +  "/?token=DX43YVUK5EDWAE357ROL";
+
+        var newReq = new XMLHttpRequest();
+        newReq.open("GET", URL_VENUE, false);
+        newReq.send(null);
+        var venueData = JSON.parse(newReq.responseText);
+        findEventVenues(venueData.address.latitude, venueData.address.longitude, events.name.text,
+            events.url, events.start.local);
+        return i < 9;
 
     });
 }
