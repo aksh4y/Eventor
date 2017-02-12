@@ -30,6 +30,7 @@ function initialize() {
 
             infoWindow.setPosition(pos);
             infoWindow.setContent('Location found.');
+            infos.push(infoWindow);
             map.setCenter(pos);
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -108,10 +109,12 @@ function findEventVenues(lat, lng, event_name, event_url, date) {
         map: map,
         title:event_name
     });
+    markers.push(marker);
     var infowindow = new google.maps.InfoWindow({
         map: map,
         content:  event_name + '<br />' + "Date: " + date + '<br />' + '<a href="' + event_url +'">Event Link</a>'
     });
+    infos.push(infowindow);
     clearInfos();
 // add event handler to current marker
     google.maps.event.addListener(marker, 'click', function() {
@@ -122,6 +125,48 @@ function findEventVenues(lat, lng, event_name, event_url, date) {
 
 // To add the marker to the map, call setMap();
    // marker.setMap(map);
+}
+
+function findScrapedEventVenues(address, event_name, event_url, date) {
+    //var address = document.getElementById("gmap_where").value;
+// script uses our 'geocoder' in order to find location by address name
+    geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) { // and, if everything is ok
+// we will center map
+            var addrLocation = results[0].geometry.location;
+            map.setCenter(addrLocation);
+// store current coordinates into hidden variables
+// and then - add new custom marker
+            var addrMarker = new google.maps.Marker({
+                position: addrLocation,
+                map: map,
+                title: event_name
+            });
+            var mapOptions = {
+                zoom: 14,
+                center: myLatlng
+            };
+            /*var marker = new google.maps.Marker({
+             position: myLatlng,
+             map: map,
+             title:event_name
+             });*/
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                content: event_name + '<br />' + "Date: " + date + '<br />' + '<a href="' + event_url + '">Event Link</a>'
+            });
+            clearInfos();
+// add event handler to current marker
+            google.maps.event.addListener(marker, 'click', function () {
+                clearInfos();
+                infowindow.open(map, marker);
+            });
+            infos.push(infowindow);
+
+// To add the marker to the map, call setMap();
+            // marker.setMap(map);
+        }
+    });
 }
 // find custom places function
 function findPlaces() {
@@ -145,6 +190,7 @@ function findPlaces() {
     service = new google.maps.places.PlacesService(map);
     service.search(request, createMarkers);*/
     build_URL(lat, lng, radius, type, keyword);
+    //scrapedData();
 }
 
 function scrapedData() {
@@ -155,33 +201,33 @@ function scrapedData() {
     var lng = document.getElementById('lng').value;
     var cur_location = new google.maps.LatLng(lat, lng);
     var xhReq = new XMLHttpRequest();
-    xhReq.open("", URL_EVENT, false);
+    xhReq.open("GET", "https://raw.githubusercontent.com/aksh4y/Eventor/master/boston%20calendar%20data%20source.json", false);
     xhReq.send(null);
     var cwData = JSON.parse(xhReq.responseText);
+    console.log(cwData);
 
-
-    $.each(cwData.events, function (i, events) {
+var data = Array();
+    $.each(cwData[0], function (i, events) {
 
         //var option_cate = '<li class="item"><a href="#">' + events.name.text + '</a></li>';
         //$('#product_list').append(option_cate);
-        var venue_id = events.venue_id;
-        var URL_VENUE = "https://www.eventbriteapi.com/v3/venues/" +
-            venue_id +  "/?token=DX43YVUK5EDWAE357ROL";
-
-        var newReq = new XMLHttpRequest();
-        newReq.open("GET", URL_VENUE, false);
-        newReq.send(null);
-        var venueData = JSON.parse(newReq.responseText);
-        findEventVenues(venueData.address.latitude, venueData.address.longitude, events.name.text,
-            events.url, events.start.local);
-        return i < 9;
-
+        console.log(events.category);
+        if (events.category == type)
+            data.push(events);
     });
+
+    $.each(data, function(i, events) {
+        findScrapedEventVenues(data.place.event, data.name.event, data.date.event);
+        return i < 9;
+    });
+
 }
 
 
 function build_URL(lat, lng, radius, type, keyword) {
 
+
+    clearOverlays();
     var URL_EVENT = "https://www.eventbriteapi.com/v3/events/search/?location.latitude=" +
     lat + "&location.longitude=" + lng + "&categories=" + type + "&location.within=" + radius + "km"
         + "&q=" + keyword
