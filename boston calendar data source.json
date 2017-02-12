@@ -1,12 +1,4 @@
-{
-    "pagination": {
-        "object_count": 3152, 
-        "page_number": 1, 
-        "page_size": 50, 
-        "page_count": 64, 
-        "continuation": "eyJwYWdlIjogMn0"
-    },
-"events":[
+[
  {
    "name.event": "The Winter Walk",
    "date.event": "Feb 12, 2017",
@@ -14694,4 +14686,3 @@
    "category": "Other"
  }
 ]
-}
