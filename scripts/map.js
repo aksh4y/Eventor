@@ -147,6 +147,38 @@ function findPlaces() {
     build_URL(lat, lng, radius, type, keyword);
 }
 
+function scrapedData() {
+    var type = document.getElementById('gmap_type').value;
+    var radius = document.getElementById('gmap_radius').value;
+    var keyword = document.getElementById('gmap_keyword').value;
+    var lat = document.getElementById('lat').value;
+    var lng = document.getElementById('lng').value;
+    var cur_location = new google.maps.LatLng(lat, lng);
+    var xhReq = new XMLHttpRequest();
+    xhReq.open("", URL_EVENT, false);
+    xhReq.send(null);
+    var cwData = JSON.parse(xhReq.responseText);
+
+
+    $.each(cwData.events, function (i, events) {
+
+        //var option_cate = '<li class="item"><a href="#">' + events.name.text + '</a></li>';
+        //$('#product_list').append(option_cate);
+        var venue_id = events.venue_id;
+        var URL_VENUE = "https://www.eventbriteapi.com/v3/venues/" +
+            venue_id +  "/?token=DX43YVUK5EDWAE357ROL";
+
+        var newReq = new XMLHttpRequest();
+        newReq.open("GET", URL_VENUE, false);
+        newReq.send(null);
+        var venueData = JSON.parse(newReq.responseText);
+        findEventVenues(venueData.address.latitude, venueData.address.longitude, events.name.text,
+            events.url, events.start.local);
+        return i < 9;
+
+    });
+}
+
 
 function build_URL(lat, lng, radius, type, keyword) {
 
