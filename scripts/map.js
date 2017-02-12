@@ -8,15 +8,46 @@ var infos = Array();
 function initialize() {
 // prepare Geocoder
     geocoder = new google.maps.Geocoder();
-// set initial position (New York)
-    var myLatlng = new google.maps.LatLng(40.7143528,-74.0059731);
+// set initial position (Boston)
+    var myLatlng = new google.maps.LatLng(42.3601,-71.0589);
     var myOptions = { // default map options
         zoom: 14,
         center: myLatlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);
+    map = new google.maps.Map(document.getElementById('map'), myOptions);
+    var infoWindow = new google.maps.InfoWindow({map: map});
+
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            document.getElementById('lat').value = pos.lat;
+            document.getElementById('lng').value = pos.lng;
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            map.setCenter(pos);
+        }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+        });
+    } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+    }
 }
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+}
+
+
 // clear overlays function
 function clearOverlays() {
     if (markers) {
@@ -37,6 +68,8 @@ function clearInfos() {
         }
     }
 }
+
+
 // find address function
 function findAddress() {
     var address = document.getElementById("gmap_where").value;
@@ -83,6 +116,40 @@ function findPlaces() {
     service = new google.maps.places.PlacesService(map);
     service.search(request, createMarkers);
 }
+
+function scraped_data_URL_builder() {
+    var URL_REQ = "https://raw.githubusercontent.com/aksh4y/Eventor/master/data_source.json";
+    $.ajax({
+        type: "GET",
+        url: URL_REQ,
+        data: {limit: 3},
+        dataType: "json",
+        success: function(data) {
+            // Do some awesome stuff.
+        }
+    });
+}
+
+
+function build_URL(lat, lng, radius, type, keyword) {
+
+    var URL_REQ = "https://www.eventbriteapi.com/v3/events/search/?location.lattitude=" +
+    lat + "&location.longitude=" + lng + "&categories=" + type + "&location.within=" + radius + "km"
+        + "&q=" + keyword
+        + "&token=DX43YVUK5EDWAE357ROL";
+
+    var xhReq = new XMLHttpRequest();
+    xhReq.open("GET", URL_REQ, false);
+    xhReq.send(null);
+    var cwData = JSON.parse(xhReq.responseText)
+
+    $.each(cwData.events, function (i, events) {
+
+        var option_cate = '<li class="item"><a href="#">' + events.name.text + '</a></li>';
+        $('#product_list').append(option_cate);
+
+    });
+}
 // create markers (from 'findPlaces' function)
 function createMarkers(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -93,7 +160,7 @@ function createMarkers(results, status) {
             createMarker(results[i]);
         }
     } else if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-        alert('Sorry, nothing is found');
+        alert('Sorry, no such event in your area!');
     }
 }
 // creare single marker function

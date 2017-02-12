@@ -1,0 +1,26 @@
+<html>
+<body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script>
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://www.eventbriteapi.com/v3/events/search/?q=boston&token=DX43YVUK5EDWAE357ROL",
+        "method": "GET",
+        "headers": {}
+    }
+
+    $.ajax(settings).done(function (data) {
+        console.log(data);
+        var content = "<h4>" + data.events[0].name.text + "</h4>" + "<h5>" +  "Start Date: " + data.events[0].start.local + "</h5>"
+            + "<h5>" + "End Date: " + data.events[0].end.local + "</h5>";
+        $("#eventbrite").append(content);
+    });
+</script>
+
+<div id="eventbrite"></div>
+
+</body>
+</html>

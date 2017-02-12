@@ -1,80 +1,82 @@
 /*This stylesheet contains some custom class rather than Bootstrap*/
 
 
- body { 
-	-webkit-background-size: cover;
-     background:
-             linear-gradient(
-                     rgba(0, 0, 0, 0.75),
-                     rgba(0, 0, 0, 0.75)
-             ),
-             url("../assets/bg.jpg") no-repeat center center fixed;
-	 -moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+html, body {
+    height:100%;
+    margin:0;
+    padding:0
 }
 
- h1, h2, h3, p, option {
-	 color: #FFFFFF;
-	 text-align: center;
- }
-
- th {
-     color: white;
- }
-
- tr {
-     color: #FF1493;
- }
- /*h1 {
-	 font-size: 70px;
- }
-
- h2 {
-	 font-size: 60px;
- }
-
- h3 {
-	 font-size: 50px;
- }*/
-
- a {
-     color: #FF1493;
-	 font-size: 25px;
- }
-
-ul {
-    padding-top: 20px;
-    text-align: center;
+input.form-control {
+    margin-bottom: 5px;
 }
 
-.list-inline li:after{
-    content:'|';
-    margin:0 5px 0 10px;
-    color: white;
-    vertical-align: text-bottom;
-    font-size: 20px;
+body {
+    -webkit-background-size: cover;
+    background:
+            linear-gradient(
+                    rgba(0, 0, 0, 0.75),
+                    rgba(0, 0, 0, 0.75)
+            ),
+            url("../assets/bg.jpg") no-repeat center center fixed;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
-.list-inline li:last-child:after {
-    content: '|';
-    margin: 0 10px 0 10px;
-    font-size: 0;
+p, h1, h2, h3 {
+    color: #FFFFFF;
 }
 
-.navbar {
-	background-color: transparent;
-	background: transparent;
-	border-color: transparent;
+.as-body-padding {
+    padding-top: 70px;
+    padding-bottom: 70px;
 }
 
-.navbar li { 
-	color: #000
+.no-pad {
+    padding-top: 0;
+}
+
+a, label {
+    color: #FF1493;
 }
 
 .list-group-item {
     color: #FF1493;
 }
+
+.navbar-default {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.as-header {
+    font-size: 50px;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}
+.navbar-default .navbar-link {
+    color: #FFFFFF;
+}
+.navbar-text a, .navbar-brand a {
+    color: #FFFFFF;
+}
+
+.list-group-item {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.as-toolbar {
+    position: absolute;
+    right: 15px;
+    background-color: white;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    border-bottom-left-radius: 5px;
+    opacity: 0.7;
+}
+
 .as-list-header {
     color: aqua;
     font-weight: bold;
@@ -89,22 +91,44 @@ ul {
     padding-left: 5px;
 }
 
-#gmap_canvas {
-    height: 700px;
-    position: relative;
-    width: 900px;
+.as-bottom-pad {
+    padding-bottom: 70px;
 }
+
+#map {
+    margin-top: 120px;
+    height: 500px;
+    overflow: hidden;
+    border: 2px solid #FFFFFF;
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+}
+
+select, input{
+    color: black;
+}
+.as-brand-image {
+    margin-top: 0;
+    width: 150px;
+    height: 140px;
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
 .actions {
-    background-color: #FFFFFF;
+    margin-top: 120px;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 500px;
     bottom: 30px;
     padding: 10px;
-    position: absolute;
     right: 30px;
     z-index: 2;
-    border-top: 1px solid #abbbcc;
-    border-left: 1px solid #a7b6c7;
-    border-bottom: 1px solid #a1afbf;
-    border-right: 1px solid #a7b6c7;
+    border: 1px solid #FFFFFF;
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
     border-radius: 12px;
@@ -117,19 +141,30 @@ ul {
 .actions input, .actions select {
     width: 85%;
 }
+
+.as-footer {
+    text-align: center;
+    float: initial;
+    margin: 15px 15px 15px 15px;
+}
 .button {
-    background-color: #d7e5f5;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d7e5f5), color-stop(100%, #cbe0f5));
+    /*background-color: #d7e5f5;
+   /* background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d7e5f5), color-stop(100%, #cbe0f5));
     background-image: -webkit-linear-gradient(top, #d7e5f5, #cbe0f5);
     background-image: -moz-linear-gradient(top, #d7e5f5, #cbe0f5);
     background-image: -ms-linear-gradient(top, #d7e5f5, #cbe0f5);
     background-image: -o-linear-gradient(top, #d7e5f5, #cbe0f5);
-    background-image: linear-gradient(top, #d7e5f5, #cbe0f5);
+    background-image: linear-gradient(top, #d7e5f5, #cbe0f5);*/
     border-top: 1px solid #abbbcc;
     border-left: 1px solid #a7b6c7;
     border-bottom: 1px solid #a1afbf;
     border-right: 1px solid #a7b6c7;
-    -webkit-border-radius: 12px;
+    line-height: 1;
+    margin-bottom: 5px;
+    padding: 6px 0 7px 0;
+    text-align: center;
+    color: white;
+    /*-webkit-border-radius: 12px;
     -moz-border-radius: 12px;
     border-radius: 12px;
     -webkit-box-shadow: inset 0 1px 0 0 white;
@@ -141,8 +176,8 @@ ul {
     margin-bottom: 5px;
     padding: 6px 0 7px 0;
     text-align: center;
-    text-shadow: 0 1px 1px #fff;
-    width: 150px;
+    !*text-shadow: 0 1px 1px #fff;*!
+    width: 150px;*/
 }
 .button:hover {
     background-color: #ccd9e8;

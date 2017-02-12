@@ -4,53 +4,97 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link href="css/style.css" rel="stylesheet"/>
-    <script type="text/javascript" src="scripts/google_places.js"></script>
+   <!-- <script type="text/javascript" src="scripts/google_places.js"></script>-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBwKLkYQpcniYBU6MIrEzryXvaqTOhN9gw"></script>
     <script type="text/javascript" src="scripts/map.js"></script>
     <meta charset="UTF-8">
     <title>Eventor</title>
 </head>
-<body>
-    <div class="container-fluid">
-        <h1>Eventor</h1>
-    </div>
-    <div id="gmap_canvas"></div>
-    <div class="actions">
-        <div class="button">
-            <label for="gmap_where">Where:</label>
-            <input id="gmap_where" type="text" name="gmap_where" /></div>
-        <div id="button2" class="button" onclick="findAddress(); return false;">Search for address</div>
-        <div class="button">
-            <label for="gmap_keyword">Keyword (optional):</label>
-            <input id="gmap_keyword" type="text" name="gmap_keyword" /></div>
-        <div class="button">
-            <label for="gmap_type">Type:</label>
-            <select id="gmap_type">
-                <option value="art_gallery">art_gallery</option>
-                <option value="atm">atm</option>
-                <option value="bank">bank</option>
-                <option value="bar">bar</option>
-                <option value="cafe">cafe</option>
-                <option value="food">food</option>
-                <option value="hospital">hospital</option>
-                <option value="police">police</option>
-                <option value="store">store</option>
-            </select>
+<body onload="initialize()">
+<div class="navbar-brand text-center col-sm-12">
+    <a class="navbar-link">
+        <img class="as-brand-image" src="assets/eventor_logo.png"> </img>
+    </a>
+</div>
+<div class="container-fluid">
+    <div class="col-sm-2">
+        <div class="actions">
+            <div class="button">
+                <label for="gmap_where">Where:</label>
+                <input id="gmap_where" type="text" name="gmap_where" /></div>
+            <div id="button2" class="button" onclick="findAddress(); return false;">Search for address</div>
+            <div class="button">
+                <label for="gmap_keyword">Keyword (optional):</label>
+                <input id="gmap_keyword" type="text" name="gmap_keyword" /></div>
+            <div class="button">
+                <label for="gmap_type">Category:</label>
+                <select id="gmap_type">
+                    <!--<option value="242">Outdoors & Adventure</option>
+                    <option value="292">Tech</option>
+                    <option value="232">Family</option>
+                    <option value="302">Health & Wellness</option>
+                    <option value="282">Sports & Fitness</option>
+                    <option value="162">Food & Drinks</option>
+                    <option value="512">Music</option>
+                    <option value="585">LGBTQ</option>
+                    <option value="583">Film</option>
+                    <option value="222">Book Clubs</option>
+                    <option value="252">Pets</option>
+                    <option value="272">Social</option>
+                    <option value="584">Fashion & Beauty</option>
+                    <option value="122">Arts & Culture</option>-->
+                    <option value="101">Business</option>
+                    <option value="102">Science & Tech</option>
+                    <option value="103">Music</option>
+                    <option value="104">Film & Media</option>
+                    <option value="105">Arts</option>
+                    <option value="106">Fashion</option>
+                    <option value="107">Health</option>
+                    <option value="108">Sports & Fitness</option>
+                    <option value="109">Travel & Outdoor</option>
+                    <option value="110">Food & Drink</option>
+                    <option value="111">Charity & Causes</option>
+                    <option value="112">Government</option>
+                    <option value="113">Community</option>
+                    <option value="114">Spirituality</option>
+                    <option value="115">Family & Education</option>
+                    <option value="116">Holiday</option>
+                    <option value="117">Home & Lifestyle</option>
+                    <option value="118">Auto, Boat & Air</option>
+                    <option value="119">Hobbies</option>
+                    <option value="199">Other</option>
+                </select>
+            </div>
+            <div class="button">
+                <label for="gmap_radius">Radius (in km):</label>
+                <select id="gmap_radius">
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+            <input type="hidden" id="lat" name="lat" value="40.7143528" />
+            <input type="hidden" id="lng" name="lng" value="-74.0059731" />
+            <div id="button1" class="button as-btn" onclick="findPlaces(); return false;">Search Events</div>
         </div>
-        <div class="button">
-            <label for="gmap_radius">Radius:</label>
-            <select id="gmap_radius">
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-                <option value="1500">1500</option>
-                <option value="5000">5000</option>
-            </select>
-        </div>
-        <input type="hidden" id="lat" name="lat" value="40.7143528" />
-        <input type="hidden" id="lng" name="lng" value="-74.0059731" />
-        <div id="button1" class="button" onclick="findPlaces(); return false;">Search for objects</div>
     </div>
-
+    <div id="map" class="col-sm-10"></div>
+</div>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="row container-fluid text-center">
+        <div class="col-xs-12">
+            <div class="navbar-text as-footer">
+                <a href="#" class="navbar-link">
+                    Made with
+                      <span class="glyphicon glyphicon-heart">
+                      </span>
+                     in Boston
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
 </body>
 </html>
