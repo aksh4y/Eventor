@@ -25,7 +25,6 @@ Instagram and Twitter interaction: for each event we want to see that is people 
 Advertisement space: the web design of the app has been design to add advertisement in order to be sell for any particular company.
 Better location in event lists: if you want your event to rank higher in the event list, you have to pay.
 
-## Go to the app
-[Eventor] (http://eventor-app.herokuapp.com)
+## Check out our [demo video](https://youtu.be/9lZ69n9Wgzk)
 
-Check out our [demo video] (https://youtu.be/9lZ69n9Wgzk)
+## Go to [Eventor](http://eventor-app.herokuapp.com)
